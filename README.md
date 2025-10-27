@@ -40,21 +40,24 @@ Can be found here: [Hunter RL on PyBullet – Full Series](#)
 hunter_pybullet_rl/
 ├── README.md
 └── src                             # Main source code
-    ├── bringup                     # ROS 2 bringup package
-    ├── control_cpp                 # C++ control logic
-    ├── interfaces                  # ROS 2 interfaces
+    ├── bringup
+    ├── control_cpp
+    ├── hunter_model                # URDF model package
+    ├── interfaces
     └── pybullet_sim                # PyBullet simulation package
-        ├── pybullet_sim            # Python package
-        │   ├── __init__.py         # Python package init
-        │   ├── CMakeLists.txt      # ROS 2 build file
-        │   ├── envs                # Gym-like RL environments
-        │   ├── launch              # Launch files
-        │   ├── scripts             # Simulation node
-        │   ├── training            # Model training & evaluation
-        │   └── urdf                # Hunter & environment models
-        ├── resource                # Resource index for ROS 2
+        ├── config                  # Configuration files
+        ├── launch                  # Launch files
+        │   └── sim.launch.py
         ├── package.xml             # ROS 2 package manifest
-        └── setup.py                # Python package setup
+        ├── pybullet_sim            # Python package
+        │   ├── __init__.py
+        │   └── sim_node.py
+        ├── resource                # Resource files
+        │   └── pybullet_sim
+        ├── setup.cfg               # Package configuration
+        ├── setup.py                # Package setup
+        └── urdf
+            └── hunter_model.urdf
 
 ```
 
