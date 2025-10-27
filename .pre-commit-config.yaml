@@ -1,0 +1,33 @@
+repos:
+  # --- Basic file hygiene ---
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.5.0
+    hooks:
+      - id: end-of-file-fixer
+      - id: trailing-whitespace
+      - id: check-yaml
+      - id: check-added-large-files
+      - id: check-merge-conflict
+
+  # --- C++ code format & analysis ---
+  - repo: local
+    hooks:
+      - id: clang-format
+        name: clang-format (universal C++ style)
+        entry: clang-format -style=file -i
+        language: system
+        files: \.(cpp|hpp|cc|c|h)$
+
+      - id: cppcheck
+        name: cppcheck static analysis
+        entry: cppcheck --enable=warning,style --quiet
+        language: system
+        files: \.(cpp|hpp|cc|c|h)$
+
+  # --- Optional: Python scripts style check ---
+  - repo: https://github.com/psf/black
+    rev: 23.3.0
+    hooks:
+      - id: black
+        language_version: python3
+        files: \.(py)$
