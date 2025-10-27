@@ -1,0 +1,105 @@
+# .clang-format for C++ (with comments)
+# This file controls automatic code formatting for C++ files.
+# Each option is explained for clarity. Adjust as needed for your project.
+
+---
+Language:        Cpp                # Apply to C++ files
+BasedOnStyle:    Google             # Start from Google's style as a base
+AccessModifierOffset: -2            # Indent access modifiers (public/private) by -2 spaces
+AlignAfterOpenBracket: Align        # Align parameters after open bracket
+AlignConsecutiveAssignments: false   # Do not align consecutive assignments, prevents extra spaces before '='
+AlignConsecutiveDeclarations: false  # Align consecutive declarations
+AlignEscapedNewlines: Left          # Align escaped newlines to the left
+AlignOperands:   true               # Align operands in expressions
+AlignTrailingComments: true         # Align trailing comments
+AllowAllParametersOfDeclarationOnNextLine: true # Allow all parameters on next line
+AllowShortBlocksOnASingleLine: false            # Don't allow short blocks on one line
+AllowShortCaseLabelsOnASingleLine: false        # Don't allow short case labels on one line
+AllowShortFunctionsOnASingleLine: Inline        # Allow short functions inline
+AllowShortIfStatementsOnASingleLine: false      # Don't allow short ifs on one line
+AllowShortLoopsOnASingleLine: false             # Don't allow short loops on one line
+AlwaysBreakAfterDefinitionReturnType: None      # Don't always break after return type
+AlwaysBreakAfterReturnType: None                # Don't always break after return type
+AlwaysBreakBeforeMultilineStrings: false        # Don't break before multiline strings
+AlwaysBreakTemplateDeclarations: true           # Always break template declarations
+BinPackParameters: true              # Pack as many parameters as possible into each line
+BinPackArguments: true               # Pack as many arguments as possible into each line
+PenaltyBreakBeforeFirstCallParameter: 10000 # Strongly discourage breaking after '('
+PenaltyBreakAssignment: 1000        # Strongly discourage breaking assignments
+PenaltyBreakString: 1000            # Strongly discourage breaking strings
+# BraceWrapping settings are disabled when using BreakBeforeBraces: Attach
+# BraceWrapping:
+#   AfterClass:      true         # Wrap braces after class
+#   AfterControlStatement: true  # Wrap after if/for/while
+#   AfterEnum:       true        # Wrap after enum
+#   AfterFunction:   true        # Wrap after function
+#   AfterNamespace:  true        # Wrap after namespace
+#   AfterObjCDeclaration: true   # Wrap after ObjC decl
+#   AfterStruct:     true        # Wrap after struct
+#   AfterUnion:      true        # Wrap after union
+#   BeforeCatch:     true        # Wrap before catch
+#   BeforeElse:      true        # Wrap before else
+#   IndentBraces:    false       # Don't indent braces
+#   SplitEmptyFunction: true     # Split empty function braces
+#   SplitEmptyRecord: true       # Split empty record braces
+#   SplitEmptyNamespace: true    # Split empty namespace braces
+BreakBeforeBinaryOperators: None         # Don't break before binary operators
+BreakBeforeBraces: Attach                # Keep braces on the same line
+BreakBeforeTernaryOperators: false  # Do not break before ternary operators
+BreakConstructorInitializersBeforeComma: true # Break before comma in constructor initializers
+BreakConstructorInitializers: BeforeColon     # Break before colon in constructor initializers
+BreakAfterJavaFieldAnnotations: false         # Don't break after Java field annotations
+BreakStringLiterals: false                    # Don't break string literals
+ColumnLimit: 125                           # Allow very long lines before breaking
+CommentPragmas:  '^ IWYU pragma:'            # Special comment handling
+CompactNamespaces: false                     # Don't compact namespaces
+ConstructorInitializerAllOnOneLineOrOnePerLine: true # All on one line or one per line
+ConstructorInitializerIndentWidth: 4          # Indent width for constructor initializers
+ContinuationIndentWidth: 4                    # Indent width for continued lines
+Cpp11BracedListStyle: true                    # Use C++11 braced list style
+DerivePointerAlignment: false                 # Don't derive pointer alignment from code
+DisableFormat:   false                        # Don't disable formatting
+ExperimentalAutoDetectBinPacking: false       # Don't auto-detect bin packing
+FixNamespaceComments: true                    # Add/fix namespace comments
+ForEachMacros:   [ foreach, Q_FOREACH, BOOST_FOREACH ] # Macros treated as foreach
+IncludeBlocks:   Preserve                     # Preserve include blocks
+IncludeCategories:
+  - Regex:           '^<.*\.h>'
+    Priority:        1
+  - Regex:           '^<.*'
+    Priority:        2
+  - Regex:           '.*'
+    Priority:        3
+IncludeIsMainRegex: '(Test)?$'                # Main include regex
+IndentCaseLabels: true                        # Indent case labels
+IndentPPDirectives: AfterHash                 # Indent preprocessor directives
+IndentWidth:     4                            # Indent width
+IndentWrappedFunctionNames: false             # Don't indent wrapped function names
+KeepEmptyLinesAtTheStartOfBlocks: false       # Don't keep empty lines at block start
+MacroBlockBegin: ''                           # Macro block begin
+MacroBlockEnd:   ''                           # Macro block end
+MaxEmptyLinesToKeep: 1                        # Max empty lines to keep
+NamespaceIndentation: All                     # Indent all namespaces
+PointerAlignment: Left                        # Align pointer to the left (int* ptr)
+ReflowComments:  true                         # Reflow comments
+SortIncludes:    true                         # Sort includes
+SortUsingDeclarations: true                   # Sort using declarations
+SpaceAfterCStyleCast: true                    # Space after C-style cast
+SpaceAfterTemplateKeyword: true               # Space after template keyword
+SpaceBeforeAssignmentOperators: true         # Add a single space before '='
+SpaceBeforeCpp11BracedList: true              # Space before C++11 braced list
+SpaceBeforeCtorInitializerColon: true         # Space before colon in ctor initializer
+SpaceBeforeInheritanceColon: true             # Space before colon in inheritance
+SpaceBeforeParens: ControlStatements          # Space before parens in control statements
+SpaceBeforeRangeBasedForLoopColon: true       # Space before colon in range-based for
+SpaceInEmptyParentheses: false                # No space in empty parentheses
+SpacesBeforeTrailingComments: 2               # Spaces before trailing comments
+SpacesInAngles:  false                        # No space in angle brackets
+SpacesInCStyleCastParentheses: false          # No space in C-style cast parentheses
+SpacesInContainerLiterals: false              # No space in container literals
+SpacesInParentheses: false                    # No space in parentheses
+SpacesInSquareBrackets: false                 # No space in square brackets
+Standard:        Cpp11                        # Use C++11 standard
+TabWidth:        4                            # Tab width
+UseTab:          Never                        # Never use tabs
+
