@@ -16,7 +16,7 @@
         iyz="-5.13308150598312E-07"
         izz="0.12660862809283" />
     </inertial>
-  </xacro:macro>  
+  </xacro:macro>
 
   <xacro:macro name="inertial_wheel">
     <inertial>
@@ -33,7 +33,7 @@
         iyz="0"
         izz="0.11072" />
     </inertial>
-  </xacro:macro>  
+  </xacro:macro>
 
   <xacro:macro name="inertial_steering_link">
     <inertial>
@@ -50,6 +50,6 @@
         iyz="0"
         izz="0.1" />
     </inertial>
-  </xacro:macro>  
+  </xacro:macro>
 
 </robot>
