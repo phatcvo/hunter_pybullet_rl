@@ -2,11 +2,11 @@
 
 ## 1. Overview
 
-This project demonstrates a **full RL pipeline** for the **AgileX Hunter robot** running on **PyBullet**, 
+This project demonstrates a **full RL pipeline** for the **AgileX Hunter robot** running on **PyBullet**,
 covering everything from simulation setup → sensor integration → RL training → CI/CD automation.
 
-It is designed as a **series** for robotics & reinforcement learning practitioners who want to build 
-a reproducible workflow that connects RL (Python) ↔ Runtime logic (C++). 
+It is designed as a **series** for robotics & reinforcement learning practitioners who want to build
+a reproducible workflow that connects RL (Python) ↔ Runtime logic (C++).
 Can be found here: [Hunter RL on PyBullet – Full Series](#)
 
 ---

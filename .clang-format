@@ -102,4 +102,3 @@ SpacesInSquareBrackets: false                 # No space in square brackets
 Standard:        Cpp11                        # Use C++11 standard
 TabWidth:        4                            # Tab width
 UseTab:          Never                        # Never use tabs
-
