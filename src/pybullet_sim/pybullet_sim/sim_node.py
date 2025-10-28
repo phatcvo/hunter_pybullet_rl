@@ -132,7 +132,7 @@ class PyBulletHunter(Node):
         # Dynamics setup friction for wheels
         for j in [self.fl_steer, self.fr_steer, self.rl_drive, self.rr_drive]:
             if j is not None:
-                p.changeDynamics(self.robot, j, lateralFriction=1.2)
+                p.changeDynamics(self.robot, j, lateralFriction=1.0)
 
         # Command state
         self.v_cmd = 0.0

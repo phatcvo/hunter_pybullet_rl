@@ -33,6 +33,7 @@ setup(
     entry_points={
         "console_scripts": [
             "sim_node = pybullet_sim.sim_node:main",
+            "keyboard_drive = pybullet_sim.keyboard_drive:main",
         ],
     },
 )
