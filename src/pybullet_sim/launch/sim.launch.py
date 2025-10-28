@@ -13,8 +13,8 @@ def generate_launch_description():
                 parameters=[
                     {
                         "use_gui": True,
-                        "load_env": True,
-                        "load_objects": True,
+                        "static_objects": True,
+                        "dynamic_objects": True,
                         "publish_lidar": True,
                     }
                 ],

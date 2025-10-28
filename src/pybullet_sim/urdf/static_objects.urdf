@@ -1,0 +1,71 @@
+<robot name="static_objects">
+
+  <!-- Floor (root link) -->
+  <link name="floor">
+    <visual>
+      <origin xyz="0 0 0"/>
+      <geometry><box size="10 10 0.05"/></geometry>
+      <material name="gray"><color rgba="0.7 0.7 0.7 1"/></material>
+    </visual>
+    <collision><geometry><box size="10 10 0.05"/></geometry></collision>
+  </link>
+
+  <!-- Walls -->
+  <link name="wall_north">
+    <visual>
+      <origin xyz="0 5 0.75"/>
+      <geometry><box size="10 0.1 1.5"/></geometry>
+      <material name="blue"><color rgba="0.2 0.2 1 1"/></material>
+    </visual>
+    <collision><origin xyz="0 5 0.75"/><geometry><box size="10 0.1 1.5"/></geometry></collision>
+  </link>
+
+  <link name="wall_south">
+    <visual>
+      <origin xyz="0 -5 0.75"/>
+      <geometry><box size="10 0.1 1.5"/></geometry>
+      <material name="blue"><color rgba="0.2 0.2 1 1"/></material>
+    </visual>
+    <collision><origin xyz="0 -5 0.75"/><geometry><box size="10 0.1 1.5"/></geometry></collision>
+  </link>
+
+  <link name="wall_east">
+    <visual>
+      <origin xyz="5 0 0.75"/>
+      <geometry><box size="0.1 10 1.5"/></geometry>
+      <material name="blue"><color rgba="0.2 0.2 1 1"/></material>
+    </visual>
+    <collision><origin xyz="5 0 0.75"/><geometry><box size="0.1 10 1.5"/></geometry></collision>
+  </link>
+
+  <link name="wall_west">
+    <visual>
+      <origin xyz="-5 0 0.75"/>
+      <geometry><box size="0.1 10 1.5"/></geometry>
+      <material name="blue"><color rgba="0.2 0.2 1 1"/></material>
+    </visual>
+    <collision><origin xyz="-5 0 0.75"/><geometry><box size="0.1 10 1.5"/></geometry></collision>
+  </link>
+
+  <!-- Fixed joints linking all walls to floor -->
+  <joint name="joint_floor_wall_north" type="fixed">
+    <parent link="floor"/>
+    <child link="wall_north"/>
+  </joint>
+
+  <joint name="joint_floor_wall_south" type="fixed">
+    <parent link="floor"/>
+    <child link="wall_south"/>
+  </joint>
+
+  <joint name="joint_floor_wall_east" type="fixed">
+    <parent link="floor"/>
+    <child link="wall_east"/>
+  </joint>
+
+  <joint name="joint_floor_wall_west" type="fixed">
+    <parent link="floor"/>
+    <child link="wall_west"/>
+  </joint>
+
+</robot>

@@ -16,10 +16,10 @@ Can be found here: [Hunter RL on PyBullet – Full Series](#)
 | **Stage** |  **Episode** | **Title** | **Goal** | **Output** |**Status** |**Tag**|
 |------------|---|--------------|-----------|-----------|-------------|---|
 | **Stage 1 – Simulation & Setup Base** | EP1 | Intro: Hunter Robot & PyBullet | Overview & motivation | Hunter run demo ||
-|  | EP2 | Create URDF + Map | Create URDF robot & environment | URDF load ok ||
+|  | EP2 | Create URDF + Env | Create URDF robot & environment | URDF load ok ||
 |  | EP3 | Build Simulation Base | Gravity, timestep, keyboard drive | Hunter moves ||
-|  | EP4 | Build Gym Env (`HunterEnv`) | reset/step/render loop | Env runs 1 episode ||
-| | EP5 | Add Sensors (Lidar, IMU) | Realistic observation | Sensor data OK ||
+| | EP4 | Add Sensors (Lidar, IMU) | Realistic observation | Sensor data OK ||
+|  | EP5 | Build Gym Env (`HunterEnv`) | reset/step/render loop | Env runs 1 episode ||
 | **Stage 2 – RL Core Pipeline** |EP6 | Reward Design | Reward shaping & done logic | Reasonable reward ||
 |  | EP7 | Train PPO Agent | RL training with SB3 | Model `.zip` ||
 |  | EP8 | Visualization | TensorBoard & stats | Reward curves ||
