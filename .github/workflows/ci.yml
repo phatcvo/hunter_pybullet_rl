@@ -39,7 +39,8 @@ jobs:
             - name: Install Lint Tools
               run: |
                   sudo apt install -y clang-format cppcheck
-                  pip3 install black flake8
+                  pip3 install --break-system-packages black flake8 || pip3 install black flake8
+                    echo "$HOME/.local/bin" >> $GITHUB_PATH
 
             # rosdep install for workspace
             - name: rosdep install
