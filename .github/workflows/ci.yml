@@ -1,84 +1,87 @@
-name: ROS CI
+name: ROS2 CI
 
 on:
     push:
     pull_request:
 
 jobs:
-    build-test:
+    build-and-test:
         runs-on: ubuntu-22.04
 
+        env:
+            ROS_DISTRO: humble
+            ROS_WS: ${{ github.workspace }}
+
         steps:
-            - name: Checkout
+            - name: Checkout source
               uses: actions/checkout@v4
 
-            # 🐧 Setup ROS (auto-detect ROS1 vs ROS2)
-            - name: Setup ROS
+            # 🛠️ ROS2 setup
+            - name: Setup ROS2 repository
               run: |
-                  sudo sh -c 'echo "deb http://packages.ros.org/ros/ubuntu `lsb_release -sc` main" > /etc/apt/sources.list.d/ros-latest.list'
-                  sudo apt install curl -y
-                  curl -s https://raw.githubusercontent.com/ros/rosdistro/master/ros.asc | sudo apt-key add -
-                  sudo apt update
+                  sudo apt update && sudo apt install -y curl gnupg lsb-release
+                  sudo curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key \
+                    -o /usr/share/keyrings/ros-archive-keyring.gpg
 
-                  if [ -f /opt/ros/noetic/setup.sh ]; then
-                    echo "Detected ROS1 (Noetic)"
-                    sudo apt install -y ros-noetic-desktop-full python3-rosdep python3-catkin-tools
-                  else
-                    echo "Installing ROS2 Humble"
-                    sudo apt install -y ros-humble-desktop python3-colcon-common-extensions
-                  fi
+                  echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/ros-archive-keyring.gpg] \
+                    http://packages.ros.org/ros2/ubuntu $(lsb_release -sc) main" | \
+                    sudo tee /etc/apt/sources.list.d/ros2.list > /dev/null
+
+                  sudo apt update
+                  sudo apt install -y ros-humble-desktop python3-colcon-common-extensions \
+                                      python3-rosdep python3-rospytest python3-pip
 
                   sudo rosdep init || true
                   rosdep update
 
-            # 📦 Install tooling
-            - name: Install tools
+            # 📦 Install dependencies & tools
+            - name: Install formatting + lint tools
               run: |
                   sudo apt install -y clang-format cppcheck
                   pip3 install black flake8
 
-            # ✅ C++ format check
+            # ✅ Run ROS2 dependency install
+            - name: rosdep install
+              run: |
+                  source /opt/ros/$ROS_DISTRO/setup.sh
+                  rosdep install -y --from-paths src --ignore-src
+
+            # 🔍 C++ formatting check
             - name: clang-format check
               run: |
+                  echo "Checking C++ format..."
                   FILES=$(find . -regex '.*\.\(cpp\|hpp\|h\|cc\)$')
-                  for file in $FILES; do
-                    clang-format -style=file $file | diff $file - > /dev/null
-                    if [ $? -ne 0 ]; then
-                      echo "Format issue: $file"
+                  for f in $FILES; do
+                    diff <(clang-format -style=file $f) $f > /dev/null || {
+                      echo "❌ Format issue in $f"
                       exit 1
-                    fi
+                    }
                   done
                   echo "✅ C++ format OK"
 
-            # 🔍 C++ static analysis
+            # 🧪 C++ static analyze
             - name: cppcheck
               run: |
-                  cppcheck --enable=warning,style,performance,portability --error-exitcode=1 --inline-suppr .
+                  cppcheck --enable=warning,style,performance,portability \
+                           --error-exitcode=1 --inline-suppr src || exit 1
 
-            # 🐍 Python format
-            - name: Python Black check
-              run: |
-                  black --check .
+            # 🐍 Python formatting check
+            - name: Python black check
+              run: black --check .
 
-            # 🐍 Python Lint
+            # 🐍 Python lint
             - name: Flake8 lint
-              run: |
-                  flake8 --max-line-length=120 .
+              run: flake8 --max-line-length=120
 
-            # 🛠️ Build & Test ROS workspace
-            - name: Build & test
+            # 🛠️ Build workspace
+            - name: colcon build
               run: |
-                  source /opt/ros/*/setup.sh
+                  source /opt/ros/$ROS_DISTRO/setup.sh
+                  colcon build --event-handlers console_direct+ --symlink-install
 
-                  if [ -f src/CMakeLists.txt ]; then
-                    echo "Using catkin (ROS1)"
-                    rosdep install --from-paths src --ignore-src -r -y
-                    catkin_make -DCMAKE_BUILD_TYPE=Release
-                    catkin_make run_tests
-                  else
-                    echo "Using colcon (ROS2)"
-                    rosdep install --from-paths src --ignore-src -r -y
-                    colcon build --symlink-install
-                    colcon test
-                    colcon test-result --verbose
-                  fi
+            # 🧪 Test workspace
+            - name: colcon test
+              run: |
+                  source install/setup.sh
+                  colcon test
+                  colcon test-result --verbose
