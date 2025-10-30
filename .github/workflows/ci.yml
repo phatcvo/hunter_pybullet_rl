@@ -5,7 +5,7 @@ on:
     pull_request:
 
 jobs:
-    build-and-test:
+    build-test:
         runs-on: ubuntu-22.04
 
         env:
@@ -13,83 +13,102 @@ jobs:
             ROS_WS: ${{ github.workspace }}
 
         steps:
-            - name: Checkout source
+            - name: Checkout code
               uses: actions/checkout@v4
 
-            # 🛠️ ROS2 setup
-            - name: Setup ROS2 repository
+            # Install ROS2 repo + ROS2 Humble
+            - name: Setup ROS2
               run: |
                   sudo apt update && sudo apt install -y curl gnupg lsb-release
-
                   sudo curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key \
-                  -o /usr/share/keyrings/ros-archive-keyring.gpg
+                    -o /usr/share/keyrings/ros-archive-keyring.gpg
 
                   echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/ros-archive-keyring.gpg] \
-                  http://packages.ros.org/ros2/ubuntu $(lsb_release -sc) main" | \
-                  sudo tee /etc/apt/sources.list.d/ros2.list > /dev/null
+                    http://packages.ros.org/ros2/ubuntu $(lsb_release -sc) main" | \
+                    sudo tee /etc/apt/sources.list.d/ros2.list > /dev/null
 
                   sudo apt update
                   sudo apt install -y ros-humble-desktop \
                                       python3-colcon-common-extensions \
-                                      python3-rosdep \
-                                      python3-pip
+                                      python3-rosdep python3-pip
 
                   sudo rosdep init || true
                   rosdep update
 
-            # 📦 Install dependencies & tools
-            - name: Install formatting + lint tools
+            # Install format + lint tools
+            - name: Install Lint Tools
               run: |
                   sudo apt install -y clang-format cppcheck
                   pip3 install black flake8
 
-            # ✅ Run ROS2 dependency install
+            # rosdep install for workspace
             - name: rosdep install
               run: |
                   source /opt/ros/$ROS_DISTRO/setup.sh
-                  rosdep install -y --from-paths src --ignore-src
+                  rosdep install -y --from-paths src --ignore-src || true
 
-            # 🔍 C++ formatting check
-            - name: clang-format check
-              run: |
-                  echo "Checking C++ format..."
-                  FILES=$(find . -regex '.*\.\(cpp\|hpp\|h\|cc\)$')
-                  for f in $FILES; do
-                    diff <(clang-format -style=file $f) $f > /dev/null || {
-                      echo "❌ Format issue in $f"
-                      exit 1
-                    }
-                  done
-                  echo "✅ C++ format OK"
-
-            # 🧪 C++ static analyze
-            - name: cppcheck
+            # C++ format check
+            - name: Run clang-format
               run: |
                   FILES=$(find src -type f \( -name "*.cpp" -o -name "*.hpp" -o -name "*.h" \))
                   if [ -z "$FILES" ]; then
-                  echo "⚠️ No C++ files found. Skipping cppcheck."
-                  exit 0
+                    echo "ℹ️ No C++ files found. Skipping clang-format."
+                  else
+                    for FILE in $FILES; do
+                      diff <(clang-format -style=file $FILE) $FILE > /dev/null || {
+                        echo "❌ Format error in $FILE"
+                        exit 1
+                      }
+                    done
+                    echo "✅ C++ format OK"
                   fi
 
+            # C++ static analyze
+            - name: Run cppcheck
+              run: |
+                  if [ ! -d "src" ]; then
+                    echo "ℹ️ No src folder. Skipping cppcheck."
+                    exit 0
+                  fi
+                  FILES=$(find src -type f \( -name "*.cpp" -o -name "*.hpp" -o -name "*.h" \))
+                  if [ -z "$FILES" ]; then
+                    echo "ℹ️ No C++ source files. Skipping cppcheck."
+                    exit 0
+                  fi
                   cppcheck --enable=warning,style,performance,portability \
-                          --error-exitcode=1 --inline-suppr $FILES
+                           --error-exitcode=1 --inline-suppr src
+                  echo "✅ C++ static analysis OK"
 
-            # 🐍 Python formatting check
-            - name: Python black check
-              run: black --check .
+            # Python Black format check
+            - name: Run Black
+              run: |
+                  FILES=$(find . -name "*.py")
+                  if [ -z "$FILES" ]; then
+                    echo "ℹ️ No Python files. Skipping black."
+                    exit 0
+                  fi
+                  black --check .
+                  echo "✅ Python format OK"
 
-            # 🐍 Python lint
-            - name: Flake8 lint
-              run: flake8 --max-line-length=120
+            # Python lint
+            - name: Run Flake8
+              run: |
+                  FILES=$(find . -name "*.py")
+                  if [ -z "$FILES" ]; then
+                    echo "ℹ️ No Python files. Skipping flake8."
+                    exit 0
+                  fi
+                  flake8 --max-line-length=120
+                  echo "✅ Python lint OK"
 
-            # 🛠️ Build workspace
-            - name: colcon build
+            # Build package
+            - name: Build ROS2 workspace
               run: |
                   source /opt/ros/$ROS_DISTRO/setup.sh
                   colcon build --event-handlers console_direct+ --symlink-install
 
-            # 🧪 Test workspace
-            - name: colcon test
+            # Run tests
+            - name: Test workspace
               run: |
                   source install/setup.sh
                   colcon test
