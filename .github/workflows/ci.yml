@@ -65,8 +65,14 @@ jobs:
             # 🧪 C++ static analyze
             - name: cppcheck
               run: |
+                  FILES=$(find src -type f \( -name "*.cpp" -o -name "*.hpp" -o -name "*.h" \))
+                  if [ -z "$FILES" ]; then
+                  echo "⚠️ No C++ files found. Skipping cppcheck."
+                  exit 0
+                  fi
+
                   cppcheck --enable=warning,style,performance,portability \
-                           --error-exitcode=1 --inline-suppr src || exit 1
+                          --error-exitcode=1 --inline-suppr $FILES
 
             # 🐍 Python formatting check
             - name: Python black check
