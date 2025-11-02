@@ -91,17 +91,6 @@ jobs:
                   black --check .
                   echo "✅ Python format OK"
 
-            # Python lint
-            # - name: Run Flake8
-            #   run: |
-            #       FILES=$(find . -name "*.py")
-            #       if [ -z "$FILES" ]; then
-            #         echo "ℹ️ No Python files. Skipping flake8."
-            #         exit 0
-            #       fi
-            #       flake8 --max-line-length=120
-            #       echo "✅ Python lint OK"
-
             # Build package
             - name: Build ROS2 workspace
               run: |
